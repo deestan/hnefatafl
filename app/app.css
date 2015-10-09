@@ -28,3 +28,55 @@
   content: "";
   padding: 0;
 }
+
+.board {
+    position: relative;
+}
+
+.piece {
+    cursor: pointer;
+    position: absolute;
+    font-size: 30px;
+    line-height: 30px;
+    transition: 0.2s;
+}
+
+.piece:hover .piece-border {
+    margin: -2px;
+    border: 2px solid goldenrod;
+}
+
+.piece.selected .piece-border {
+    margin: -2px;
+    border: 2px solid peachpuff;
+}
+
+.piece .black-pawn {
+    color: #010a05;
+}
+
+.piece .white-pawn, .piece .white-king {
+    color: oldlace;
+}
+
+.board td {
+    width: 30px;
+    height: 30px;
+    background: saddlebrown;
+}
+
+.board td:hover {
+    background: sandybrown;
+}
+
+.board tr.even td.odd, .board tr.odd td.even {
+    background: darkgoldenrod;
+}
+
+.board tr.even td.odd:hover, .board tr.odd td.even:hover {
+    background: peachpuff;
+}
+
+.board td.escape {
+    background: gold;
+}
