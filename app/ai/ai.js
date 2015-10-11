@@ -4,29 +4,32 @@ angular.module('myApp.ai', ['myApp.rules'])
 .factory('ai', ['rules', function(rules) {
   // returnMoveFactor of 10 means return every 10th valid move
   function allMoves(board, returnMoveFactor) {
-    var validPieces = [];
+    var validPieceIndexes = [];
     var skipper = (Math.random() * returnMoveFactor) >> 0;
     if (skipper >= returnMoveFactor)
       skipper = returnMoveFactor;
     board.pieces.forEach(function(piece, pieceIndex) {
       if (piece.dead) return;
       if (!(board.turn % 2) == !piece.black)
-        validPieces.push({ black: piece.black, whiteKing: piece.whiteKing, index: pieceIndex });
+        validPieceIndexes.push(pieceIndex);
     });
 
     var moves = [];
-    function addMove(move, force) {
+    function addMove(pieceIndex, row, col, force) {
+      if (!rules.validMove(board, pieceIndex, row, col))
+        return;
       if (skipper == 0 || force) {
-        moves.push(move);
+        moves.push({ pieceIndex: pieceIndex, row: row, col: col });
         skipper += returnMoveFactor;
       }
       skipper -= 1;
     }
-    validPieces.forEach(function(piece, pieceIndex) {
+    validPieceIndexes.forEach(function(pieceIndex) {
+      var piece = board.pieces[pieceIndex];
       for (var row=0; row < 11; row++)
-        for (var col=0; col < 11; col++)
-          if (rules.validMove(board, piece.index, row, col))
-            addMove({pieceIndex: piece.index, row: row, col: col}, piece.whiteKing);
+        addMove(pieceIndex, row, piece.col, piece.whiteKing);
+      for (var col=0; col < 11; col++)
+        addMove(pieceIndex, piece.row, col, piece.whiteKing);
     });
 
     return moves;
