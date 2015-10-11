@@ -38,22 +38,17 @@ angular.module('myApp.ai', ['myApp.rules'])
     return score;
   }
 
-  function search(depth, board, forBlack) {
+  function search(depth, board, minimize, playingForBlack) {
     if (depth == 0) {
       var val = evaluateBoardForBlack(board);
-      return val;
+      return playingForBlack ? val : -val;
     }
 
-    var bestValue = -Infinity;
-    var isBetterThan = function(blackScore, otherBlackScore) {
-      return blackScore > otherBlackScore;
-    }
-
-    if (!!(board.turn % 2) != !!forBlack) {
-      isBetterThan = function(blackScore, otherBlackScore) {
-        return blackScore < otherBlackScore;
-      }
-      bestValue = Infinity;
+    var bestValue = minimize ? Infinity : -Infinity;
+    function isBetterThan(score, otherScore) {
+      if (minimize)
+        return score < otherScore;
+      return score > otherScore;
     }
 
     var moves = allMoves(board);
@@ -61,7 +56,7 @@ angular.module('myApp.ai', ['myApp.rules'])
     for (var i=0; i < moves.length; i++) {
       var move = moves[i];
       var newState = applyMove(board, move);
-      var moveValue = search(depth - 1, newState, forBlack);
+      var moveValue = search(depth - 1, newState, !minimize, playingForBlack);
       if (isBetterThan(moveValue, bestValue)) {
         bestMove = move;
         bestValue = moveValue;
@@ -81,15 +76,14 @@ angular.module('myApp.ai', ['myApp.rules'])
   }
 
   function findBestMove(board) {
-    var forBlack = !!board.turn;
+    var playingForBlack = !!board.turn;
     var moves = allMoves(board);
     var bestMoves = [], bestValue = -Infinity;
     for (var i=0; i < moves.length; i++) {
       var move = moves[i];
       var newState = applyMove(board, move);
-      var moveValue = search(1, newState, forBlack);
-      if ((moveValue > bestValue && forBlack) ||
-          (moveValue < bestValue && !forBlack)) {
+      var moveValue = search(1, newState, true, playingForBlack);
+      if (moveValue > bestValue) {
         bestMoves = [move];
         bestValue = moveValue;
       }
@@ -99,5 +93,6 @@ angular.module('myApp.ai', ['myApp.rules'])
     }
     return bestMoves[Math.random() * bestMoves.length >> 0];
   }
+
   return { bestMove: findBestMove };
 }]);
