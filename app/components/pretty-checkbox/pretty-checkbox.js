@@ -6,7 +6,8 @@ angular.module('myApp.prettyCheckbox', [])
   return {
     restrict: 'E',
     scope: {
-      checked: "=ngModel"
+      checked: "=ngModel",
+      ngChange: "="
     },
     templateUrl: 'components/pretty-checkbox/pretty-checkbox.html',
     link: function(scope, elem, attr) {

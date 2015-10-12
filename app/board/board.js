@@ -10,11 +10,15 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 }])
 
 .controller('BoardCtrl', ['$scope', 'ai', 'rules', function($scope, ai, rules) {
+  $scope.aiValueChanged = function() {
+    setTimeout($scope.makeAiMove, 500);
+  }
+
   $scope.selectPiece = function(index, event) {
     $scope.selectedIndex = index;
     jQuery('.piece').removeClass('selected');
     if (index != undefined) {
-      if ($scope.pieces[index].black)
+      if ($scope.pieces[index].black == !($scope.turn % 2))
         return $scope.selectedIndex = undefined;
       jQuery(event.target).closest('.piece').addClass('selected');
     }
@@ -32,15 +36,23 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     }
   }
 
+  var aiMoveTimeout;
   $scope.makeAiMove = function() {
+    if (aiMoveTimeout) return;
+    if ($scope.turn % 2) {
+      if (!$scope.blackAi) return;
+    } else {
+      if (!$scope.whiteAi) return;
+    }
     var move = ai.bestMove($scope);
-    setTimeout(function() {
-      if (!$scope.movePiece(move.pieceIndex, move.row, move.col))
-        $scope.makeAiMove();
+    aiMoveTimeout = setTimeout(function() {
+      aiMoveTimeout = null;
+      $scope.movePiece(move.pieceIndex, move.row, move.col);
       $scope.$apply();
-    }, 50);
+      setTimeout($scope.makeAiMove, 500);
+    }, 500);
   }
-
+  
   $scope.movePiece = function(pieceIndex, row, col) {
     if ($scope.ended) return;
 
@@ -48,8 +60,9 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     if (!piece) return;
     if (piece.dead) return;
 
-    if (!rules.validMove($scope, pieceIndex, row, col))
+    if (!rules.validMove($scope, pieceIndex, row, col)) {
       return;
+    }
     
     rules.applyMove($scope, pieceIndex, row, col);
 
@@ -57,6 +70,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   }
 
   $scope.turn = 0;
+  $scope.blackAi = true;
   $scope.pieces = [
     // top arrow
     { row: 0, col: 3, black: true },

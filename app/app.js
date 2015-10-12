@@ -11,5 +11,5 @@ angular.module('myApp', [
   'myApp.prettyCheckbox'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/view2'});
+  $routeProvider.otherwise({redirectTo: '/board'});
 }]);

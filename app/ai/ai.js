@@ -131,7 +131,8 @@ angular.module('myApp.ai', ['myApp.rules'])
         bestMoves.push(move);
       }
     }
-    return bestMoves[Math.random() * bestMoves.length >> 0];
+    var returnedMove = bestMoves[Math.random() * bestMoves.length >> 0];
+    return returnedMove;
   }
 
   return { bestMove: findBestMove };
