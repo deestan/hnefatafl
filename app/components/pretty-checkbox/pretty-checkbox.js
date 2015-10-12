@@ -15,7 +15,7 @@ angular.module('myApp.prettyCheckbox', [])
         if (scope.checked)
           jQuery(elem).addClass('checked');
       }
-      scope.checked = false;
+      scope.prettyCheckboxChange();
     }
   }
 }])
