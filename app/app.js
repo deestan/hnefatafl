@@ -7,8 +7,9 @@ angular.module('myApp', [
   'myApp.view2',
   'myApp.ai',
   'myApp.rules',
-  'myApp.version'
+  'myApp.version',
+  'myApp.prettyCheckbox'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.otherwise({redirectTo: '/board'});
+  $routeProvider.otherwise({redirectTo: '/view2'});
 }]);

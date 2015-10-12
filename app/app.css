@@ -80,3 +80,55 @@
 .board td.escape {
     background: gold;
 }
+
+/* pretty-checkbox style stuff */
+pretty-checkbox {
+    vertical-align: bottom;
+    width: 60px;
+    height: 20px;
+    display: inline-block;
+    overflow: hidden;
+    border: 2px solid #607080;
+    border-radius: 8px;
+    background: white;
+    position: relative;
+    transition: 0.2s;
+}
+
+pretty-checkbox:hover {
+    box-shadow: 0px 0px 2px 0px blue;
+}
+
+pretty-checkbox .on-text {
+    position: absolute;
+    left: 3px;
+    color: white;
+}
+
+pretty-checkbox .slider {
+    width: 30px;
+    border: 2px solid #607080;
+    background: grey;
+    height: 17px;
+    border-radius: 6px;
+    position: absolute;
+    left: 0;
+    transition: 0.2s;
+}
+
+pretty-checkbox.checked .slider {
+    left: 26px;
+}
+
+pretty-checkbox .off-text {
+    position: absolute;
+    right: 5px;
+}
+
+pretty-checkbox.checked {
+    background: black;
+}
+
+pretty-checkbox input {
+    display: none;
+}
