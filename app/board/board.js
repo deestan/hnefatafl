@@ -49,7 +49,6 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
       aiMoveTimeout = null;
       $scope.movePiece(move.pieceIndex, move.row, move.col);
       $scope.$apply();
-      setTimeout($scope.makeAiMove, 500);
     }, 500);
   }
   
@@ -65,6 +64,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     }
     
     rules.applyMove($scope, pieceIndex, row, col);
+    setTimeout($scope.makeAiMove, 500);
 
     return true;
   }

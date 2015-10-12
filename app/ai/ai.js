@@ -78,7 +78,7 @@ angular.module('myApp.ai', ['myApp.rules'])
       return score > otherScore;
     }
 
-    var moves = allMoves(board, [undefined, 100, 100, 1][depth]);
+    var moves = allMoves(board, [undefined, 100, 1][depth]);
 
     if (moves.length == 0) {
       // Evaluate at this depth
@@ -122,7 +122,7 @@ angular.module('myApp.ai', ['myApp.rules'])
     for (var i=0; i < moves.length; i++) {
       var move = moves[i];
       var newState = applyMove(board, move);
-      var moveValue = search(3, newState, true);
+      var moveValue = search(2, newState, true);
       if (moveValue > bestValue) {
         bestMoves = [move];
         bestValue = moveValue;
