@@ -101,10 +101,27 @@ angular.module('myApp.rules', [])
     function killSurrounded(d_row, d_col) {
       var victim = pieceAt(board, row + d_row, col + d_col);
       if (!victim) return;
-      var helper = pieceAt(board, row + d_row * 2, col + d_col * 2);
-      if (!helper) return;
+      var helperRow = row + d_row * 2;
+      var helperCol = col + d_col * 2;
+      var helper = pieceAt(board, helperRow, helperCol);
+      var helperPerp1 = pieceAt(board, row + d_row + d_col, col + d_col + d_row);
+      var helperPerp2 = pieceAt(board, row + d_row - d_col, col + d_col - d_row);
+      if (!helper) {
+        var helpByHostileSquare =
+          (helperRow == 0 && helperCol == 0) ||
+          (helperRow == 0 && helperCol == 10) ||
+          (helperRow == 10 && helperCol == 0) ||
+          (helperRow == 10 && helperCol == 10) ||
+          (helperRow == 5 && helperCol == 5);
+        if (!helpByHostileSquare)
+          return;
+      }
       if (!allies(piece, helper)) return;
       if (allies(piece, victim)) return;
+      if (victim.whiteKing) {
+        if (!helper || !helperPerp1 || !helperPerp2)
+          return;
+      }
       victim.dead = true;
     }
     killSurrounded(-1,  0);
