@@ -57,7 +57,7 @@ angular.module('myApp.rules', [])
       if (col == 10 && row == 10) return;
       return true;
     }
-    if (!checkBlackToEscapeSquare()) return;
+    if (!checkPeonToEscapeSquare()) return;
     
     return true;
   }
