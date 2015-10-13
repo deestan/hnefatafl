@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myApp.ai', ['myApp.rules'])
-.factory('ai', ['rules', function(rules) {
+.factory('ai', ['rules', '$http', function(rules, $http) {
   // returnMoveFactor of 10 means return every 10th valid move
   function allMoves(board, returnMoveFactor) {
     var validPieceIndexes = [];
@@ -132,8 +132,22 @@ angular.module('myApp.ai', ['myApp.rules'])
       }
     }
     var returnedMove = bestMoves[Math.random() * bestMoves.length >> 0];
-    return returnedMove;
+    callback(returnedMove);
   }
 
-  return { bestMove: findBestMove };
+  function findBestMoveOffloaded(board, callback) {
+    $http({
+      method: 'POST',
+      url: 'http://localhost:8080/ponder',
+      data: { pieces: board.pieces,
+              turn: board.turn
+            }
+    }).then(function good(response) {
+      callback(response.data);
+    }, function bad(response) {
+      callback(new Error(response));
+    });
+  }
+
+  return { bestMove: findBestMoveOffloaded };
 }]);

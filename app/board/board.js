@@ -18,8 +18,16 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     $scope.selectedIndex = index;
     jQuery('.piece').removeClass('selected');
     if (index != undefined) {
-      if ($scope.pieces[index].black == !($scope.turn % 2))
-        return $scope.selectedIndex = undefined;
+
+      // Is it the correct player's turn, and is it human controlled?
+      if ($scope.pieces[index].black) {
+        if (!($scope.turn % 2) || $scope.blackAi)
+          return $scope.selectedIndex = undefined;
+      } else {
+        if (($scope.turn % 2) || $scope.whiteAi)
+          return $scope.selectedIndex = undefined;
+      }
+
       jQuery(event.target).closest('.piece').addClass('selected');
     }
   }
@@ -36,20 +44,23 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     }
   }
 
-  var aiMoveTimeout;
+  var aiMoveWait;
   $scope.makeAiMove = function() {
-    if (aiMoveTimeout) return;
+    if (aiMoveWait) return;
+    if ($scope.ended) return;
     if ($scope.turn % 2) {
       if (!$scope.blackAi) return;
     } else {
       if (!$scope.whiteAi) return;
     }
-    var move = ai.bestMove($scope);
-    aiMoveTimeout = setTimeout(function() {
-      aiMoveTimeout = null;
-      $scope.movePiece(move.pieceIndex, move.row, move.col);
-      $scope.$apply();
-    }, 500);
+    ai.bestMove($scope, function(move) {
+      setTimeout(function() {
+        aiMoveWait = null;
+        $scope.movePiece(move.pieceIndex, move.row, move.col);
+        $scope.$apply();
+      }, 500);
+    });
+    aiMoveWait = true;
   }
   
   $scope.movePiece = function(pieceIndex, row, col) {
