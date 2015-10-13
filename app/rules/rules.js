@@ -91,11 +91,13 @@ angular.module('myApp.rules', [])
     board.turn += 1;
 
      function allies(piece1, piece2) {
-      if (piece1.black && piece2.black) return true;
-      if (piece1.white && piece2.white) return true;
-      if (piece1.white && piece2.whiteKing) return true;
-      if (piece1.whiteKing && piece2.white) return true;
-      return false;
+       if (!piece1 || !piece2)
+         return false;
+       if (piece1.black && piece2.black) return true;
+       if (piece1.white && piece2.white) return true;
+       if (piece1.white && piece2.whiteKing) return true;
+       if (piece1.whiteKing && piece2.white) return true;
+       return false;
     }
 
     function killSurrounded(d_row, d_col) {
@@ -116,7 +118,7 @@ angular.module('myApp.rules', [])
         if (!helpByHostileSquare)
           return;
       }
-      if (!allies(piece, helper)) return;
+      if (!allies(piece, helper) && !helpByHostileSquare) return;
       if (allies(piece, victim)) return;
       if (victim.whiteKing) {
         if (!helper || !helperPerp1 || !helperPerp2)
