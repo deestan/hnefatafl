@@ -49,8 +49,8 @@ angular.module('myApp.rules', [])
     }
     if (!checkNoJump()) return;
 
-    function checkBlackToEscapeSquare() {
-      if (!piece.black) return true;
+    function checkPeonToEscapeSquare() {
+      if (piece.whiteKing) return true;
       if (col == 0 && row == 0) return;
       if (col == 0 && row == 10) return;
       if (col == 10 && row == 0) return;
