@@ -1,13 +1,13 @@
 package no.bouvet.hnefatafl;
 
 import io.dropwizard.Application;
-import io.dropwizard.setup.Environment;
 import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 import no.bouvet.hnefatafl.config.Config;
-import no.bouvet.hnefatafl.resources.Brain;
 import no.bouvet.hnefatafl.health.BrainHealthCheck;
-
+import no.bouvet.hnefatafl.resources.Brain;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import java.util.EnumSet;
@@ -31,7 +31,7 @@ public class App extends Application<Config> {
     public void run(Config config, Environment environment) {
         // Enable CORS headers
         final FilterRegistration.Dynamic cors =
-            environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+                environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         // Configure CORS parameters
         cors.setInitParameter("allowedOrigins", "*");
         cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");

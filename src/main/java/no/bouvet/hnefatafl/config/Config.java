@@ -1,8 +1,9 @@
 package no.bouvet.hnefatafl.config;
 
-import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.Configuration;
 import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.validation.constraints.NotNull;
 
 public class Config extends Configuration {
@@ -12,8 +13,8 @@ public class Config extends Configuration {
     @NotEmpty
     private String defaultName = "Stranger";
 
-	@NotNull
-	private Integer searchDepth = 2;
+    @NotNull
+    private Integer searchDepth = 2;
 
     @JsonProperty
     public String getTemplate() {
@@ -41,7 +42,7 @@ public class Config extends Configuration {
     }
 
     @JsonProperty
-    public void setSearchDepth(Integer  searchDepth) {
+    public void setSearchDepth(Integer searchDepth) {
         this.searchDepth = searchDepth;
     }
 }

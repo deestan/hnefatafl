@@ -22,9 +22,9 @@ public class Rules {
                 continue;
             if (piece.isBlack() != blackTurn)
                 continue;
-            for (int toRow = 0; toRow < 11; toRow ++)
+            for (int toRow = 0; toRow < 11; toRow++)
                 addMoveIfValid(moves, pieceIndex, toRow, piece.getCol());
-            for (int toCol = 0; toCol < 11; toCol ++)
+            for (int toCol = 0; toCol < 11; toCol++)
                 addMoveIfValid(moves, pieceIndex, piece.getRow(), toCol);
         }
         return moves;
@@ -60,8 +60,7 @@ public class Rules {
             if (row == victimRow && col == victimCol) {
                 victim = p;
                 victimIndex = pIndex;
-            }
-            else if (row == helperRow && col == helperCol)
+            } else if (row == helperRow && col == helperCol)
                 helper = p;
             else if (row == helperPerp1Row && col == helperPerp1Col)
                 helperPerp1 = p;

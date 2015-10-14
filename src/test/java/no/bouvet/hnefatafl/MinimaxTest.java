@@ -3,7 +3,6 @@ package no.bouvet.hnefatafl;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import no.bouvet.hnefatafl.core.*;
 import no.bouvet.hnefatafl.core.minimax.IEvaluator;
 import no.bouvet.hnefatafl.core.minimax.Minimax;
@@ -23,7 +22,7 @@ public class MinimaxTest extends TestCase {
     public void testConstructor() {
         Board b = kingSoloTop();
         Rules r = new Rules(b);
-		new Minimax<Board>(new BoardStateStack(b, r, 0), new Evaluator(false), r);
+        new Minimax<Board>(new BoardStateStack(b, r, 0), new Evaluator(false), r);
     }
 
     public void testPrioritizeKingEscape() {
