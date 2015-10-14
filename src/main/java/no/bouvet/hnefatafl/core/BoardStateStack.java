@@ -23,9 +23,11 @@ public class BoardStateStack {
 	public final List<Piece> boardPieces;
 	private final ReversibleMove[] moveStack;
 	private int moveStackPos;
+	private final Rules rules;
 
-	public BoardStateStack(Board board, int maxDepth) {
+	public BoardStateStack(Board board, Rules rules, int maxDepth) {
 		this.board = board;
+        this.rules = rules;
 		this.boardPieces = board.getPieces();
 		this.moveStack = new ReversibleMove[maxDepth];
 		for (int i = 0; i < maxDepth; i++)
@@ -33,7 +35,22 @@ public class BoardStateStack {
 		this.moveStackPos = -1;
 	}
 
-	public void newMove(Move move) {
+	public void applyMove(Move move) {
+		Piece p = boardPieces.get(move.pieceIndex);
+		newMove(move);
+		// Apply captures
+		int captured;
+		captured = rules.capturedNeighbor(p, -1, 0);
+		if (captured != -1) capture(captured);
+		captured = rules.capturedNeighbor(p,  1, 0);
+		if (captured != -1) capture(captured);
+		captured = rules.capturedNeighbor(p, 0, -1);
+		if (captured != -1) capture(captured);
+		captured = rules.capturedNeighbor(p, 0,  1);
+		if (captured != -1) capture(captured);
+	}
+
+	private void newMove(Move move) {
 		this.moveStackPos += 1;
 		this.board.setTurn(this.board.getTurn() + 1);
 		ReversibleMove m = this.moveStack[this.moveStackPos];
@@ -49,7 +66,7 @@ public class BoardStateStack {
 	}
 
 	// Applies to last registered move.
-	public void capture(int pieceIndex) {
+	private void capture(int pieceIndex) {
 		ReversibleMove m = this.moveStack[this.moveStackPos];
 		if (m.captured0Index == -1)
 			m.captured0Index = pieceIndex;

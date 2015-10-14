@@ -1,6 +1,5 @@
 package no.bouvet.hnefatafl;
 
-import com.google.common.base.Optional;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -21,12 +20,14 @@ public class MinimaxTest extends TestCase {
 
     public void testConstructor() {
         Board b = kingSoloTop();
-		new Minimax(new BoardStateStack(b, 0), new BlackEvaluator(), new Rules(b));
+        Rules r = new Rules(b);
+		new Minimax(new BoardStateStack(b, r, 0), new BlackEvaluator(), r);
     }
 
     public void testKingEscapes() {
         Board b = kingSoloTop();
-        Minimax mm = new Minimax(new BoardStateStack(b, 1), new EscapeTopLeftEvaluator(), new Rules(b));
+        Rules r = new Rules(b);
+        Minimax mm = new Minimax(new BoardStateStack(b, r, 1), new EscapeTopLeftEvaluator(), r);
         List<Move> ms = mm.bestMove(1);
         assertEquals(1, ms.size());
         Move m = ms.get(0);
@@ -37,7 +38,8 @@ public class MinimaxTest extends TestCase {
 
     public void testKingPlansEscape() {
         Board b = kingSoloMiddleBlockedLeft();
-        Minimax mm = new Minimax(new BoardStateStack(b, 3), new EscapeTopLeftEvaluator(), new Rules(b));
+        Rules r = new Rules(b);
+        Minimax mm = new Minimax(new BoardStateStack(b, r, 3), new EscapeTopLeftEvaluator(), r);
         Move m = mm.bestMove(3).get(0);
         assertEquals(0, m.pieceIndex);
         assertEquals(0, m.toRow);
@@ -46,7 +48,8 @@ public class MinimaxTest extends TestCase {
 
     public void testNoMoves() {
         Board b = kingSoloTop();
-        Minimax mm = new Minimax(new BoardStateStack(b, 1), new EscapeTopLeftEvaluator(), new Rules(b));
+        Rules r = new Rules(b);
+        Minimax mm = new Minimax(new BoardStateStack(b, r, 1), new EscapeTopLeftEvaluator(), r);
         b.setTurn(1);
         List<Move> m = mm.bestMove(1);
         assertEquals(0, m.size());

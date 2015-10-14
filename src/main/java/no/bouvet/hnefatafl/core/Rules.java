@@ -30,6 +30,66 @@ public class Rules {
         return moves;
     }
 
+    public int capturedNeighbor(Piece moved, int dRow, int dCol) {
+        cachedPieces = board.getPieces();
+        int victimRow = moved.getRow() + dRow;
+        int victimCol = moved.getCol() + dCol;
+        int helperRow = victimRow + dRow;
+        int helperCol = victimCol + dCol;
+        int helperPerp1Row = victimRow + dCol;
+        int helperPerp1Col = victimCol + dRow;
+        int helperPerp2Row = victimRow - dCol;
+        int helperPerp2Col = victimCol - dRow;
+        int victimIndex = -1;
+        Piece victim = null;
+        Piece helper = null;
+        Piece helperPerp1 = null;
+        Piece helperPerp2 = null;
+        boolean helpByHostileSquare =
+                (helperRow == 0 && helperCol == 0) ||
+                        (helperRow == 10 && helperCol == 0) ||
+                        (helperRow == 0 && helperCol == 10) ||
+                        (helperRow == 10 && helperCol == 10) ||
+                        (helperRow == 5 && helperCol == 5);
+        for (int pIndex = 0; pIndex < cachedPieces.size(); pIndex++) {
+            Piece p = cachedPieces.get(pIndex);
+            if (p.isDead())
+                continue;
+            int row = p.getRow();
+            int col = p.getCol();
+            if (row == victimRow && col == victimCol) {
+                victim = p;
+                victimIndex = pIndex;
+            }
+            else if (row == helperRow && col == helperCol)
+                helper = p;
+            else if (row == helperPerp1Row && col == helperPerp1Col)
+                helperPerp1 = p;
+            else if (row == helperPerp2Row && col == helperPerp2Col)
+                helperPerp2 = p;
+        }
+
+        if (victim == null)
+            return -1;
+
+        // test for victim different from attacker
+        if (victim.isBlack() == moved.isBlack())
+            return -1;
+
+        // test for valid helper
+        boolean validHelper = ((helper != null && helper.isBlack() == moved.isBlack()) ||
+                helpByHostileSquare);
+        if (!validHelper)
+            return -1;
+
+        // king need to be surrounded
+        if (victim.isWhiteKing())
+            if (helper == null || helperPerp1 == null || helperPerp2 == null || !helperPerp1.isBlack() || !helperPerp2.isBlack())
+                return -1;
+
+        return victimIndex;
+    }
+
     private void addMoveIfValid(List<Move> list, int pieceIndex, int toRow, int toCol) {
         Piece p = cachedPieces.get(pieceIndex);
         int fromRow = p.getRow();
