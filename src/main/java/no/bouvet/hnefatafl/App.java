@@ -19,7 +19,7 @@ public class App extends Application<Config> {
 
     @Override
     public String getName() {
-        return "helloworld";
+        return "hnefatafl";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class App extends Application<Config> {
         cors.setInitParameter("allowedOrigins", "*");
         cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
         cors.setInitParameter("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
-        // Add URL mapping
+        // Add URL mapping for CORS
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
         Brain brain = new Brain(config.getSearchDepth());
