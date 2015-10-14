@@ -1,9 +1,6 @@
-logs/*
-!.gitkeep
-node_modules/
-bower_components/
-tmp
-.DS_Store
+frontend/logs/*
+frontend/node_modules/
+frontend/bower_components/
 .idea
 .idea/
 target/
