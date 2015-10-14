@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 
 import java.util.List;
 import java.util.Vector;
-import java.util.Random;
 
 public class Minimax {
 	private enum Direction {
@@ -22,8 +21,7 @@ public class Minimax {
         this.playingForBlack = stack.board.blackTurn();
 	}
 
-	public Optional<Move> bestMove(int depth) {
-		Random rng = new Random();
+	public List<Move> bestMove(int depth) {
 		List<Move> moves = getValidMoves();
 		List<Move> bestMoves = new Vector<Move>();
 		int bestScore = Integer.MIN_VALUE;
@@ -42,12 +40,7 @@ public class Minimax {
 			}
 		}
 
-		if (bestMoves.size() == 0)
-			return Optional.absent();
-
-		// Random move among best moves.
-		Move result = bestMoves.get(rng.nextInt(bestMoves.size()));
-        return Optional.of(result);
+        return bestMoves;
 	}
 
 	private int search(int depth, Direction direction, int alpha, int beta) {

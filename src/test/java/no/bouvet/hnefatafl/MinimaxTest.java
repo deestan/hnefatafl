@@ -25,7 +25,9 @@ public class MinimaxTest extends TestCase {
 
     public void testKingEscapes() {
         Minimax mm = new Minimax(kingSoloTop(), new EscapeTopLeftEvaluator());
-        Move m = mm.bestMove(1).get();
+        List<Move> ms = mm.bestMove(1);
+        assertEquals(1, ms.size());
+        Move m = ms.get(0);
         assertEquals(0, m.pieceIndex);
         assertEquals(0, m.toRow);
         assertEquals(0, m.toCol);
@@ -33,7 +35,7 @@ public class MinimaxTest extends TestCase {
 
     public void testKingPlansEscape() {
         Minimax mm = new Minimax(kingSoloMiddleBlockedLeft(), new EscapeTopLeftEvaluator());
-        Move m = mm.bestMove(3).get();
+        Move m = mm.bestMove(3).get(0);
         assertEquals(0, m.pieceIndex);
         assertEquals(0, m.toRow);
         assertEquals(5, m.toCol);
@@ -42,8 +44,8 @@ public class MinimaxTest extends TestCase {
     public void testNoMoves() {
         BoardStateStack bss = kingSoloTop();
         bss.board.setTurn(1);
-        Optional<Move> m = new Minimax(bss, new BlackEvaluator()).bestMove(1);
-        assertFalse(m.isPresent());
+        List<Move> m = new Minimax(bss, new BlackEvaluator()).bestMove(1);
+        assertEquals(0, m.size());
     }
 
     /* ---- Evaluators ---- */
