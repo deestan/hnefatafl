@@ -1,13 +1,12 @@
 package no.bouvet.hnefatafl.core;
 
 import java.util.List;
+import java.util.concurrent.BlockingDeque;
 
-import no.bouvet.hnefatafl.core.Board;
-import no.bouvet.hnefatafl.core.Piece;
-import no.bouvet.hnefatafl.core.Move;
+import no.bouvet.hnefatafl.core.minimax.IStateStack;
 
 /* Optimized to avoid garbage collection */
-public class BoardStateStack {
+public class BoardStateStack implements IStateStack<Board> {
 	private class ReversibleMove {
 		public int pieceIndex;
 		public int fromRow;
@@ -35,7 +34,11 @@ public class BoardStateStack {
 		this.moveStackPos = -1;
 	}
 
-	public void applyMove(Move move) {
+    public Board currentState() {
+        return board;
+    }
+
+	public void pushMove(Move move) {
 		Piece p = boardPieces.get(move.pieceIndex);
 		newMove(move);
 		// Apply captures
@@ -77,7 +80,7 @@ public class BoardStateStack {
 		this.boardPieces.get(pieceIndex).setDead(true);
 	}
 
-	public void undoMove() {
+    public void popMove() {
 		ReversibleMove m = this.moveStack[this.moveStackPos];
 		Piece p = this.boardPieces.get(m.pieceIndex);
 		p.setRow(m.fromRow);

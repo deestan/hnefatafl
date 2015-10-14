@@ -1,8 +1,8 @@
 package no.bouvet.hnefatafl.resources;
 
-import com.google.common.base.Optional;
 import no.bouvet.hnefatafl.core.*;
 import com.codahale.metrics.annotation.Timed;
+import no.bouvet.hnefatafl.core.minimax.Minimax;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -25,7 +25,7 @@ public class Brain {
     public String PonderThis(Board board) {
         Rules rules = new Rules(board);
 		BoardStateStack stack = new BoardStateStack(board, rules, searchDepth);
-		Minimax minimax = new Minimax(stack, new BlackEvaluator(), rules);
+		Minimax minimax = new Minimax(stack, new Evaluator(board.blackTurn()), rules);
 		List<Move> moves = minimax.bestMove(searchDepth);
 		if (moves.size() == 0) {
             return "null";
