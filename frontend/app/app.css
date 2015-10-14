@@ -1,0 +1,138 @@
+/* app css stylesheet */
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+.board {
+    position: relative;
+}
+
+.piece {
+    cursor: pointer;
+    position: absolute;
+    font-size: 30px;
+    line-height: 30px;
+    transition: 0.2s;
+}
+
+.piece:hover .piece-border {
+    margin: -2px;
+    border: 2px solid goldenrod;
+}
+
+.piece.selected .piece-border {
+    margin: -2px;
+    border: 2px solid peachpuff;
+}
+
+.piece .black-pawn {
+    color: #010a05;
+}
+
+.piece .white-pawn, .piece .white-king {
+    color: oldlace;
+}
+
+.board td {
+    width: 30px;
+    height: 30px;
+    background: saddlebrown;
+}
+
+.board td:hover {
+    background: sandybrown;
+}
+
+.board tr.even td.odd, .board tr.odd td.even {
+    background: darkgoldenrod;
+}
+
+.board tr.even td.odd:hover, .board tr.odd td.even:hover {
+    background: peachpuff;
+}
+
+.board td.escape {
+    background: gold;
+}
+
+.board td.throne {
+    background: silver;
+}
+
+/* pretty-checkbox style stuff */
+pretty-checkbox {
+    vertical-align: bottom;
+    width: 60px;
+    height: 20px;
+    display: inline-block;
+    overflow: hidden;
+    border: 2px solid #607080;
+    border-radius: 8px;
+    background: white;
+    position: relative;
+    transition: 0.2s;
+}
+
+pretty-checkbox:hover {
+    box-shadow: 0px 0px 2px 0px blue;
+}
+
+pretty-checkbox .on-text {
+    position: absolute;
+    left: 3px;
+    color: white;
+}
+
+pretty-checkbox .slider {
+    width: 30px;
+    border: 2px solid #607080;
+    background: grey;
+    height: 17px;
+    border-radius: 6px;
+    position: absolute;
+    left: 0;
+    transition: 0.2s;
+}
+
+pretty-checkbox.checked .slider {
+    left: 26px;
+}
+
+pretty-checkbox .off-text {
+    position: absolute;
+    right: 5px;
+}
+
+pretty-checkbox.checked {
+    background: black;
+}
+
+pretty-checkbox input {
+    display: none;
+}
