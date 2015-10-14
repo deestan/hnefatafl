@@ -6,19 +6,19 @@ import no.bouvet.hnefatafl.core.Rules;
 import java.util.List;
 import java.util.Vector;
 
-public class Minimax {
+public class Minimax<T> {
 	private enum Direction {
 		MIN,
 		MAX
 	}
 
-    private final IEvaluator blackEvaluator;
+    private final IEvaluator evaluator;
 	private final IStateStack stack;
     private final Rules rules;
 
-	public Minimax(IStateStack stack, IEvaluator blackEvaluator, Rules rules) {
+	public Minimax(IStateStack stack, IEvaluator<T> blackEvaluator, Rules rules) {
 		this.stack = stack;
-        this.blackEvaluator = blackEvaluator;
+        this.evaluator = blackEvaluator;
         this.rules = rules;
 	}
 
@@ -46,7 +46,7 @@ public class Minimax {
 
 	private int search(int depth, Direction direction, int alpha, int beta) {
 		if (depth == 0)
-			return blackEvaluator.evaluate(stack.currentState());
+			return evaluator.evaluate(stack.currentState());
 
 		List<Move> moves = rules.getValidMoves();
 		int bestScore = (direction == Direction.MAX)
