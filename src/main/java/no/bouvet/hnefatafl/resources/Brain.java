@@ -24,7 +24,7 @@ public class Brain {
     @Timed
     public String PonderThis(Board board) {
 		BoardStateStack stack = new BoardStateStack(board, searchDepth);
-		Minimax minimax = new Minimax(stack, new BlackEvaluator());
+		Minimax minimax = new Minimax(stack, new BlackEvaluator(), new Rules(board));
 		List<Move> moves = minimax.bestMove(searchDepth);
 		if (moves.size() == 0) {
             return "null";
