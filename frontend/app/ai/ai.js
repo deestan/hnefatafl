@@ -5,7 +5,7 @@ angular.module('myApp.ai', [])
   function findBestMoveOffloaded(board, callback) {
     $http({
       method: 'POST',
-      url: 'http://localhost:8080/ponder',
+      url: '/api/ponder',
       data: { pieces: board.pieces,
               turn: board.turn
             }
