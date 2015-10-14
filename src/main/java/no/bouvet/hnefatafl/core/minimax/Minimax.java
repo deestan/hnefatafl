@@ -1,6 +1,7 @@
-package no.bouvet.hnefatafl.core;
+package no.bouvet.hnefatafl.core.minimax;
 
-import com.google.common.base.Optional;
+import no.bouvet.hnefatafl.core.Move;
+import no.bouvet.hnefatafl.core.Rules;
 
 import java.util.List;
 import java.util.Vector;
@@ -11,16 +12,14 @@ public class Minimax {
 		MAX
 	}
 
-    private final IBlackEvaluator blackEvaluator;
-	private final BoardStateStack stack;
+    private final IEvaluator blackEvaluator;
+	private final IStateStack stack;
     private final Rules rules;
-    private final boolean playingForBlack;
 
-	public Minimax(BoardStateStack stack, IBlackEvaluator blackEvaluator, Rules rules) {
+	public Minimax(IStateStack stack, IEvaluator blackEvaluator, Rules rules) {
 		this.stack = stack;
         this.blackEvaluator = blackEvaluator;
         this.rules = rules;
-        this.playingForBlack = stack.board.blackTurn();
 	}
 
 	public List<Move> bestMove(int depth) {
@@ -28,7 +27,7 @@ public class Minimax {
 		List<Move> bestMoves = new Vector<Move>();
 		int bestScore = Integer.MIN_VALUE;
 		for (Move m : moves) {
-		 	stack.applyMove(m);
+		 	stack.pushMove(m);
 			try {
 				int score = search(depth - 1, Direction.MIN, Integer.MIN_VALUE, Integer.MAX_VALUE);
 				if (score > bestScore) {
@@ -38,7 +37,7 @@ public class Minimax {
 				if (score == bestScore)
 					bestMoves.add(m);
 			} finally {
-				stack.undoMove();
+				stack.popMove();
 			}
 		}
 
@@ -47,14 +46,14 @@ public class Minimax {
 
 	private int search(int depth, Direction direction, int alpha, int beta) {
 		if (depth == 0)
-			return blackEvaluator.evaluate(stack.boardPieces) * (playingForBlack ? 1 : -1);
+			return blackEvaluator.evaluate(stack.currentState());
 
 		List<Move> moves = rules.getValidMoves();
 		int bestScore = (direction == Direction.MAX)
 			? Integer.MIN_VALUE
 			: Integer.MAX_VALUE;
 		for (Move m : moves) {
-			stack.applyMove(m);
+			stack.pushMove(m);
 			try {
 				if (direction == Direction.MAX) {
 					int score = search(depth - 1, Direction.MIN, alpha, beta);
@@ -72,7 +71,7 @@ public class Minimax {
 				if (beta <= alpha)
 					break;
 			} finally {
-				stack.undoMove();
+				stack.popMove();
 			}
 		}
 

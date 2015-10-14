@@ -1,9 +1,19 @@
 package no.bouvet.hnefatafl.core;
 
+import no.bouvet.hnefatafl.core.minimax.IEvaluator;
+
 import java.util.List;
 
-public class BlackEvaluator implements IBlackEvaluator {
-    public int evaluate(List<Piece> boardPieces) {
+public class Evaluator implements IEvaluator<Board> {
+    private final boolean forBlack;
+
+    public Evaluator(boolean forBlack) {
+        this.forBlack = forBlack;
+    }
+
+    public int evaluate(Board b) {
+        List<Piece> boardPieces = b.getPieces();
+        // Based on black's perspective
         int score = 0;
 
         for (Piece p : boardPieces) {
@@ -19,9 +29,9 @@ public class BlackEvaluator implements IBlackEvaluator {
                         (row == 10 && col == 10))
                     score -= 100; // white king escaped
             }
-            score += p.isBlack() ? 1 : -2; // trades are good for black
+            score += p.isBlack() ? 1 : -2; // trades are bad for white
         }
 
-        return score;
+        return score * (forBlack ? 1 : -1);
     }
 }

@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import no.bouvet.hnefatafl.core.*;
+import no.bouvet.hnefatafl.core.minimax.IEvaluator;
+import no.bouvet.hnefatafl.core.minimax.Minimax;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +23,10 @@ public class MinimaxTest extends TestCase {
     public void testConstructor() {
         Board b = kingSoloTop();
         Rules r = new Rules(b);
-		new Minimax(new BoardStateStack(b, r, 0), new BlackEvaluator(), r);
+		new Minimax(new BoardStateStack(b, r, 0), new Evaluator(false), r);
     }
 
-    public void testKingEscapes() {
+    public void testPrioritizeKingEscape() {
         Board b = kingSoloTop();
         Rules r = new Rules(b);
         Minimax mm = new Minimax(new BoardStateStack(b, r, 1), new EscapeTopLeftEvaluator(), r);
@@ -56,11 +58,12 @@ public class MinimaxTest extends TestCase {
     }
 
     /* ---- Evaluators ---- */
-    private class EscapeTopLeftEvaluator implements IBlackEvaluator {
-        public int evaluate(List<Piece> boardPieces) {
-            for (Piece p : boardPieces)
+
+    private class EscapeTopLeftEvaluator implements IEvaluator<Board> {
+        public int evaluate(Board b) {
+            for (Piece p : b.getPieces())
                 if (p.isWhiteKing() && p.getRow() == 0 && p.getCol() == 0)
-                    return -1;
+                    return 1;
             return 0;
         }
     }
