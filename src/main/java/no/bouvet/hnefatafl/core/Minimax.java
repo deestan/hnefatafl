@@ -13,16 +13,18 @@ public class Minimax {
 
     private final IBlackEvaluator blackEvaluator;
 	private final BoardStateStack stack;
+    private final Rules rules;
     private final boolean playingForBlack;
 
-	public Minimax(BoardStateStack stack, IBlackEvaluator blackEvaluator) {
+	public Minimax(BoardStateStack stack, IBlackEvaluator blackEvaluator, Rules rules) {
 		this.stack = stack;
         this.blackEvaluator = blackEvaluator;
+        this.rules = rules;
         this.playingForBlack = stack.board.blackTurn();
 	}
 
 	public List<Move> bestMove(int depth) {
-		List<Move> moves = getValidMoves();
+		List<Move> moves = rules.getValidMoves();
 		List<Move> bestMoves = new Vector<Move>();
 		int bestScore = Integer.MIN_VALUE;
 		for (Move m : moves) {
@@ -47,7 +49,7 @@ public class Minimax {
 		if (depth == 0)
 			return blackEvaluator.evaluate(stack.boardPieces) * (playingForBlack ? 1 : -1);
 
-		List<Move> moves = getValidMoves();
+		List<Move> moves = rules.getValidMoves();
 		int bestScore = (direction == Direction.MAX)
 			? Integer.MIN_VALUE
 			: Integer.MAX_VALUE;
@@ -149,66 +151,5 @@ public class Minimax {
 		if (captured != -1) stack.capture(captured);
 		captured = capturedNeighbor(p, 0,  1);
 		if (captured != -1) stack.capture(captured);
-	}
-	
-	private List<Move> getValidMoves() {
-		boolean blackTurn = (stack.board.getTurn() % 2 == 1);
-		List<Move> moves = new Vector<Move>();
-		for (int pieceIndex = 0; pieceIndex < stack.boardPieces.size(); pieceIndex++) {
-			Piece piece = stack.boardPieces.get(pieceIndex);
-			if (piece.isDead())
-				continue;
-			if (piece.isBlack() != blackTurn)
-				continue;
-			for (int toRow = 0; toRow < 11; toRow ++)
-				addMoveIfValid(moves, pieceIndex, toRow, piece.getCol());
-			for (int toCol = 0; toCol < 11; toCol ++)
-				addMoveIfValid(moves, pieceIndex, piece.getRow(), toCol);
-		}
-		return moves;
-	}
-
-	private void addMoveIfValid(List<Move> list, int pieceIndex, int toRow, int toCol) {
-		Piece p = stack.boardPieces.get(pieceIndex);
-		int fromRow = p.getRow();
-		int fromCol = p.getCol();
-
-		// Assume correct side is moving.
-
-		// Actually move.
-		if (fromRow == toRow && fromCol == toCol)
-			return;
-
-		// Peons cannot enter escape squares.
-		if (!p.isWhiteKing())
-			if ((toRow == 0 && toCol == 0) ||
-				(toRow == 0 && toCol == 10) ||
-				(toRow == 10 && toCol == 0) ||
-				(toRow == 10 && toCol == 10))
-				return;
-
-		// Assume diagonal moves not attempted.
-
-		// Do not move through or onto other pieces.
-		int dRow = 0;
-		int dCol = 0;
-		if (fromRow < toRow) dRow = 1;
-		if (fromRow > toRow) dRow = -1;
-		if (fromCol < toCol) dCol = 1;
-		if (fromCol > toCol) dCol = -1;
-		int testRow = fromRow;
-		int testCol = fromCol;
-		while (testRow != toRow || testCol != toCol) {
-			testRow += dRow;
-			testCol += dCol;
-			for (Piece otherPiece : stack.boardPieces)
-				if (!otherPiece.isDead() &&
-					otherPiece.getRow() == testRow &&
-					otherPiece.getCol() == testCol)
-					return;
-		}
-
-		// All move tests passed.
-		list.add(new Move(pieceIndex, toRow, toCol));
 	}
 }

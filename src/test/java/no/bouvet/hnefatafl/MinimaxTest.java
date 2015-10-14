@@ -20,11 +20,13 @@ public class MinimaxTest extends TestCase {
     }
 
     public void testConstructor() {
-		new Minimax(kingSoloTop(), new BlackEvaluator());
+        Board b = kingSoloTop();
+		new Minimax(new BoardStateStack(b, 0), new BlackEvaluator(), new Rules(b));
     }
 
     public void testKingEscapes() {
-        Minimax mm = new Minimax(kingSoloTop(), new EscapeTopLeftEvaluator());
+        Board b = kingSoloTop();
+        Minimax mm = new Minimax(new BoardStateStack(b, 1), new EscapeTopLeftEvaluator(), new Rules(b));
         List<Move> ms = mm.bestMove(1);
         assertEquals(1, ms.size());
         Move m = ms.get(0);
@@ -34,7 +36,8 @@ public class MinimaxTest extends TestCase {
     }
 
     public void testKingPlansEscape() {
-        Minimax mm = new Minimax(kingSoloMiddleBlockedLeft(), new EscapeTopLeftEvaluator());
+        Board b = kingSoloMiddleBlockedLeft();
+        Minimax mm = new Minimax(new BoardStateStack(b, 3), new EscapeTopLeftEvaluator(), new Rules(b));
         Move m = mm.bestMove(3).get(0);
         assertEquals(0, m.pieceIndex);
         assertEquals(0, m.toRow);
@@ -42,9 +45,10 @@ public class MinimaxTest extends TestCase {
     }
 
     public void testNoMoves() {
-        BoardStateStack bss = kingSoloTop();
-        bss.board.setTurn(1);
-        List<Move> m = new Minimax(bss, new BlackEvaluator()).bestMove(1);
+        Board b = kingSoloTop();
+        Minimax mm = new Minimax(new BoardStateStack(b, 1), new EscapeTopLeftEvaluator(), new Rules(b));
+        b.setTurn(1);
+        List<Move> m = mm.bestMove(1);
         assertEquals(0, m.size());
     }
 
@@ -60,22 +64,22 @@ public class MinimaxTest extends TestCase {
 
     /* ---- Board state generators ---- */
 
-    private BoardStateStack kingSoloMiddleBlockedLeft() {
+    private Board kingSoloMiddleBlockedLeft() {
         Board b = new Board();
         b.setTurn(0);
         List<Piece> pieces = new ArrayList<Piece>(2);
         pieces.add(new Piece.Builder().row(5).col(5).isWhiteKing().piece);
         pieces.add(new Piece.Builder().row(5).col(0).isBlack().piece);
         b.setPieces(pieces);
-        return new BoardStateStack(b, 10);
+        return b;
     }
 
-    private BoardStateStack kingSoloTop() {
+    private Board kingSoloTop() {
         Board b = new Board();
         b.setTurn(0);
         List<Piece> pieces = new ArrayList<Piece>(1);
         pieces.add(new Piece.Builder().row(0).col(1).isWhiteKing().piece);
         b.setPieces(pieces);
-        return new BoardStateStack(b, 10);
+        return b;
     }
 }
