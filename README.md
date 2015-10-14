@@ -2,12 +2,12 @@
 
 1. Start frontend server
 2. Start backend server
-3. Go to http://localhost:8000/app
+3. Go to http://localhost:8000/
 
-# Install
+# Install and build
 
 ```
-mvn install
+mvn package
 cd frontend
 npm install
 ```
