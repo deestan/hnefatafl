@@ -1,6 +1,6 @@
 frontend/logs/*
 frontend/node_modules/
-frontend/bower_components/
+frontend/app/bower_components/
 .idea
 .idea/
 target/
