@@ -7,74 +7,74 @@ import java.util.List;
 import java.util.Vector;
 
 public class Minimax<T> {
-	private enum Direction {
-		MIN,
-		MAX
-	}
+    private enum Direction {
+        MIN,
+        MAX
+    }
 
     private final IEvaluator evaluator;
-	private final IStateStack stack;
+    private final IStateStack stack;
     private final Rules rules;
 
-	public Minimax(IStateStack stack, IEvaluator<T> blackEvaluator, Rules rules) {
-		this.stack = stack;
+    public Minimax(IStateStack stack, IEvaluator<T> blackEvaluator, Rules rules) {
+        this.stack = stack;
         this.evaluator = blackEvaluator;
         this.rules = rules;
-	}
+    }
 
-	public List<Move> bestMove(int depth) {
-		List<Move> moves = rules.getValidMoves();
-		List<Move> bestMoves = new Vector<Move>();
-		int bestScore = Integer.MIN_VALUE;
-		for (Move m : moves) {
-		 	stack.pushMove(m);
-			try {
-				int score = search(depth - 1, Direction.MIN, Integer.MIN_VALUE, Integer.MAX_VALUE);
-				if (score > bestScore) {
-					bestMoves = new Vector<Move>();
-					bestScore = score;
-				}
-				if (score == bestScore)
-					bestMoves.add(m);
-			} finally {
-				stack.popMove();
-			}
-		}
+    public List<Move> bestMove(int depth) {
+        List<Move> moves = rules.getValidMoves();
+        List<Move> bestMoves = new Vector<Move>();
+        int bestScore = Integer.MIN_VALUE;
+        for (Move m : moves) {
+            stack.pushMove(m);
+            try {
+                int score = search(depth - 1, Direction.MIN, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                if (score > bestScore) {
+                    bestMoves = new Vector<Move>();
+                    bestScore = score;
+                }
+                if (score == bestScore)
+                    bestMoves.add(m);
+            } finally {
+                stack.popMove();
+            }
+        }
 
         return bestMoves;
-	}
+    }
 
-	private int search(int depth, Direction direction, int alpha, int beta) {
-		if (depth == 0)
-			return evaluator.evaluate(stack.currentState());
+    private int search(int depth, Direction direction, int alpha, int beta) {
+        if (depth == 0)
+            return evaluator.evaluate(stack.currentState());
 
-		List<Move> moves = rules.getValidMoves();
-		int bestScore = (direction == Direction.MAX)
-			? Integer.MIN_VALUE
-			: Integer.MAX_VALUE;
-		for (Move m : moves) {
-			stack.pushMove(m);
-			try {
-				if (direction == Direction.MAX) {
-					int score = search(depth - 1, Direction.MIN, alpha, beta);
-					if (score > alpha)
-						alpha = score;
-					if (score > bestScore)
-						bestScore = score;
-				} else {
-					int score = search(depth - 1, Direction.MAX, alpha, beta);
-					if (score < beta)
-						beta = score;
-					if (score < bestScore)
-						bestScore = score;
-				}
-				if (beta <= alpha)
-					break;
-			} finally {
-				stack.popMove();
-			}
-		}
+        List<Move> moves = rules.getValidMoves();
+        int bestScore = (direction == Direction.MAX)
+                ? Integer.MIN_VALUE
+                : Integer.MAX_VALUE;
+        for (Move m : moves) {
+            stack.pushMove(m);
+            try {
+                if (direction == Direction.MAX) {
+                    int score = search(depth - 1, Direction.MIN, alpha, beta);
+                    if (score > alpha)
+                        alpha = score;
+                    if (score > bestScore)
+                        bestScore = score;
+                } else {
+                    int score = search(depth - 1, Direction.MAX, alpha, beta);
+                    if (score < beta)
+                        beta = score;
+                    if (score < bestScore)
+                        bestScore = score;
+                }
+                if (beta <= alpha)
+                    break;
+            } finally {
+                stack.popMove();
+            }
+        }
 
-		return bestScore;
-	}
+        return bestScore;
+    }
 }
