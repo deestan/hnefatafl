@@ -65,18 +65,24 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     }
   }
 
+  function isAiMove() {
+    if ($scope.turn % 2) {
+      if (!$scope.ai.white) return false;
+    } else {
+      if (!$scope.ai.black) return false;
+    }
+    return true;
+  }
+
   var aiMoveWait;
   var makeAiMove = function makeAiMove() {
     if (aiMoveWait) return;
     if ($scope.ended) return;
-    if ($scope.turn % 2) {
-      if (!$scope.ai.white) return;
-    } else {
-      if (!$scope.ai.black) return;
-    }
+    if (!isAiMove()) return;
     ai.bestMove($scope).then(
         function success(result) {
           $scope.ai.serverError = null;
+          if (!isAiMove()) return;
           var move = result.data;
           $scope.movePiece(move.pieceIndex, move.row, move.col);
           setTimeout(makeAiMove, 0);
