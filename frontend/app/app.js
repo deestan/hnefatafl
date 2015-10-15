@@ -4,7 +4,7 @@
 angular.module('myApp', [
   'ngRoute',
   'myApp.board',
-  'myApp.view2',
+  'myApp.viewRules',
   'myApp.ai',
   'myApp.rules',
   'myApp.version',
