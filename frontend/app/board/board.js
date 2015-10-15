@@ -4,12 +4,21 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/board', {
-    templateUrl: 'board/board.html',
-    controller: 'BoardCtrl'
+    templateUrl: 'board/board.html'
+    //controller: 'BoardCtrl'
   });
 }])
 
 .controller('BoardCtrl', ['$scope', 'ai', 'rules', function($scope, ai, rules) {
+  var socket = io("http://localhost:8001/");
+
+  socket.on('board', function(board) {
+    $scope.pieces = board.pieces;
+    $scope.turn = board.turn;
+    $scope.ended = board.ended;
+    $scope.$apply();
+  });
+
   $scope.selectPiece = function(index, event) {
     $scope.selectedIndex = index;
     jQuery('.piece').removeClass('selected');
@@ -84,13 +93,15 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     
     rules.applyMove($scope, pieceIndex, row, col);
 
+    socket.emit('board', { pieces: $scope.pieces, turn: $scope.turn, ended: $scope.ended });
+
     return true;
   }
 
   $scope.turn = 0;
   $scope.ai = {
     black: false,
-    white: true
+    white: false
   };
   $scope.pieces = [
     // top arrow
