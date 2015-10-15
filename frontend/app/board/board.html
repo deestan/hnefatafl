@@ -1,9 +1,9 @@
 <div ng-controller="BoardCtrl">
-  <label>White AI: <pretty-checkbox ng-model="ai.white" ng-change="aiValueChanged" /></label>
   <label>Black AI: <pretty-checkbox ng-model="ai.black" ng-change="aiValueChanged" /></label>
+  <label>White AI: <pretty-checkbox ng-model="ai.white" ng-change="aiValueChanged" /></label>
   <p>Turns taken: {{turn}}</p>
-  <span ng-show="turn%2 == 0 && !ended">White's turn <span class="ai-thinking" ng-show="ai.white">(AI thinking...)</span></span>
-  <span ng-show="turn%2 == 1 && !ended">Black's turn <span class="ai-thinking" ng-show="ai.black">(AI thinking...)</span></span>
+  <span ng-show="turn%2 == 1 && !ended">White's turn <span class="ai-thinking" ng-show="ai.white">(AI thinking...)</span></span>
+  <span ng-show="turn%2 == 0 && !ended">Black's turn <span class="ai-thinking" ng-show="ai.black">(AI thinking...)</span></span>
   <span ng-show="ended.whiteWin">White won!</span>
   <span ng-show="ended.blackWin">Black won!</span>
   <span ng-show="ended.draw">Game is draw!</span>

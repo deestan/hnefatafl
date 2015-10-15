@@ -14,7 +14,7 @@ public class Rules {
     public List<Move> getValidMoves() {
         cachedPieces = board.getPieces();
 
-        boolean blackTurn = (board.getTurn() % 2 == 1);
+        boolean blackTurn = (board.getTurn() % 2 == 0);
         List<Move> moves = new Vector<Move>();
         for (int pieceIndex = 0; pieceIndex < cachedPieces.size(); pieceIndex++) {
             Piece piece = cachedPieces.get(pieceIndex);

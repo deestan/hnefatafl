@@ -17,10 +17,10 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 
       // Is it the correct player's turn, and is it human controlled?
       if ($scope.pieces[index].black) {
-        if (!($scope.turn % 2) || $scope.ai.black)
+        if (($scope.turn % 2) || $scope.ai.black)
           return $scope.selectedIndex = undefined;
       } else {
-        if (($scope.turn % 2) || $scope.ai.white)
+        if (!($scope.turn % 2) || $scope.ai.white)
           return $scope.selectedIndex = undefined;
       }
 
@@ -44,9 +44,9 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     if (aiMoveWait) return;
     if ($scope.ended) return;
     if ($scope.turn % 2) {
-      if (!$scope.ai.black) return;
-    } else {
       if (!$scope.ai.white) return;
+    } else {
+      if (!$scope.ai.black) return;
     }
     ai.bestMove($scope).then(
         function success(result) {
@@ -89,8 +89,8 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 
   $scope.turn = 0;
   $scope.ai = {
-    black: true,
-    white: false
+    black: false,
+    white: true
   };
   $scope.pieces = [
     // top arrow

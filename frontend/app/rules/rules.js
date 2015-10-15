@@ -10,14 +10,17 @@ angular.module('myApp.rules', [])
     }
   }
 
+  function blackTurn(board) {
+    return (board.turn % 2 == 0);
+  }
+
   function validMove(board, pieceIndex, row, col) {
     var pieces = board.pieces;
     var turn = board.turn;
     var piece = pieces[pieceIndex];
 
     function checkOwnPiece() {
-      return (!(turn % 2) ==
-              !piece.black)
+      return blackTurn(board) == piece.black;
     }
     if (!checkOwnPiece()) return;
 

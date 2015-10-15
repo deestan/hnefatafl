@@ -27,6 +27,7 @@ public class MinimaxTest extends TestCase {
 
     public void testPrioritizeKingEscape() {
         Board b = kingSoloTop();
+        b.setTurn(1);
         Rules r = new Rules(b);
         Minimax<Board> mm = new Minimax<>(new BoardStateStack(b, r, 1), new EscapeTopLeftEvaluator(), r);
         List<Move> ms = mm.bestMove(1);
@@ -39,6 +40,7 @@ public class MinimaxTest extends TestCase {
 
     public void testKingPlansEscape() {
         Board b = kingSoloMiddleBlockedLeft();
+        b.setTurn(1);
         Rules r = new Rules(b);
         Minimax<Board> mm = new Minimax<Board>(new BoardStateStack(b, r, 3), new EscapeTopLeftEvaluator(), r);
         Move m = mm.bestMove(3).get(0);
@@ -51,7 +53,6 @@ public class MinimaxTest extends TestCase {
         Board b = kingSoloTop();
         Rules r = new Rules(b);
         Minimax mm = new Minimax(new BoardStateStack(b, r, 1), new EscapeTopLeftEvaluator(), r);
-        b.setTurn(1);
         List<Move> m = mm.bestMove(1);
         assertEquals(0, m.size());
     }
