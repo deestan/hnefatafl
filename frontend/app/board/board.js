@@ -82,6 +82,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 
   $scope.turn = 0;
   $scope.blackAi = true;
+  $scope.whiteAi = false;
   $scope.pieces = [
     // top arrow
     { row: 0, col: 3, black: true },
