@@ -44,7 +44,6 @@ public class Brain {
         startTask();
         try {
             logger.info("Pondering a board...");
-            // 503 Service Unavailable - overload
 
             Rules rules = new Rules(board);
             BoardStateStack stack = new BoardStateStack(board, rules, searchDepth);
