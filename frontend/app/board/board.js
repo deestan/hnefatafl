@@ -13,11 +13,28 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   var socket = io("http://localhost:8001/");
 
   socket.on('board', function(board) {
+    askingForBoard = false;
     $scope.pieces = board.pieces;
     $scope.turn = board.turn;
     $scope.ended = board.ended;
     $scope.$apply();
+    makeAiMove();
   });
+
+  var askingForBoard = false;
+  function requestBoard() {
+    askingForBoard = true;
+    socket.emit('request-board', '');
+  }
+
+  socket.on('request-board', function() {
+    if (askingForBoard) return;
+    emitBoard();
+  });
+
+  function emitBoard() {
+    socket.emit('board', { pieces: $scope.pieces, turn: $scope.turn, ended: $scope.ended });
+  }
 
   $scope.selectPiece = function(index, event) {
     $scope.selectedIndex = index;
@@ -93,7 +110,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     
     rules.applyMove($scope, pieceIndex, row, col);
 
-    socket.emit('board', { pieces: $scope.pieces, turn: $scope.turn, ended: $scope.ended });
+    emitBoard();
 
     return true;
   }
@@ -156,6 +173,8 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     $scope.ai.serverError = null;
     makeAiMove();
   }
+
+  requestBoard();
 
   $scope.$watch("ai.black", aiToggled);
   $scope.$watch("ai.white", aiToggled);

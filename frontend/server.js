@@ -19,6 +19,9 @@ io.on('connection', function(socket) {
   socket.on('board', function(board) {
     io.emit('board', board);
   });
+  socket.on('request-board', function(board) {
+    io.emit('request-board', board);
+  });
 });
 
 app.listen(PORT);
