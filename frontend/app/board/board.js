@@ -34,7 +34,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     var row = el.closest('tr').index();
     if ($scope.selectedIndex != undefined) {
       if ($scope.movePiece($scope.selectedIndex, row, col))
-        $scope.makeAiMove();
+        makeAiMove();
       $scope.selectPiece(undefined);
     }
   }
@@ -50,17 +50,20 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     }
     ai.bestMove($scope).then(
         function success(result) {
-          $scope.brainIsBusy = false;
+          $scope.ai.serverError = null;
           var move = result.data;
           $scope.movePiece(move.pieceIndex, move.row, move.col);
           setTimeout(makeAiMove, 0);
         },
         function failure(error) {
-          $scope.brainIsBusy = false;
-          if (error.status == 503)
-            console.log("Busy busy...");
+          $scope.ai.serverError = null;
+          if (error.status == 503) {
+            $scope.ai.serverError = { busy: true };
+          } else {
+            $scope.ai.serverError = { down: true };
+            console.error("Unexpected error from server.");
+          }
           setTimeout(makeAiMove, 1000);
-          console.log("BADNESS!!");
         }
     ).finally(function anyways() {
         aiMoveWait = false;
@@ -138,6 +141,11 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     { row: 5, col: 5, whiteKing: true }
   ];
 
-  $scope.$watch("ai.black", makeAiMove);
-  $scope.$watch("ai.white", makeAiMove);
+  function aiToggled() {
+    $scope.ai.serverError = null;
+    makeAiMove();
+  }
+
+  $scope.$watch("ai.black", aiToggled);
+  $scope.$watch("ai.white", aiToggled);
 }]);

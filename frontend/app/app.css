@@ -38,16 +38,34 @@
     position: absolute;
     font-size: 30px;
     line-height: 30px;
+    padding: 0;
     transition: 0.2s;
+    width: 30px;
+    height: 30px;
+}
+
+.piece .symbol {
+    padding-left: 1px;
+}
+
+.piece-border {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.piece:hover .piece-border, .piece.selected .piece-border {
+    height: 26px;
+    width: 26px;
 }
 
 .piece:hover .piece-border {
-    margin: -2px;
     border: 2px solid goldenrod;
 }
 
 .piece.selected .piece-border {
-    margin: -2px;
     border: 2px solid peachpuff;
 }
 
@@ -83,6 +101,16 @@
 
 .board td.throne {
     background: silver;
+}
+
+.error {
+    transition: 0.5s;
+    height: 22px;
+}
+
+.error.visible {
+    background-color: crimson;
+    color: white;
 }
 
 /* pretty-checkbox style stuff */

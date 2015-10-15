@@ -22,11 +22,14 @@
       <tr class="even"><td ng-click="selectSquare($event)" class="even escape"></td><td ng-click="selectSquare($event)" class="odd"></td><td ng-click="selectSquare($event)" class="even"></td><td ng-click="selectSquare($event)" class="odd"></td><td ng-click="selectSquare($event)" class="even"></td><td ng-click="selectSquare($event)" class="odd"></td><td ng-click="selectSquare($event)" class="even"></td><td ng-click="selectSquare($event)" class="odd"></td><td ng-click="selectSquare($event)" class="even"></td><td ng-click="selectSquare($event)" class="odd"></td><td ng-click="selectSquare($event)" class="even escape"></td></tr>
     </table>
     <div class="piece" ng-hide="piece.dead" ng-click="selectPiece($index, $event)" ng-repeat="piece in pieces" style="top: {{piece.row * 30}}px; left: {{piece.col * 30}}px;">
-      <div class="piece-border">
-        <div class="white-pawn" ng-show="piece.white">♟</div>
-        <div class="black-pawn" ng-show="piece.black">♟</div>
-        <div class="white-king" ng-show="piece.whiteKing">♚</div>
-      </div>
+      <div class="piece-border"></div>
+      <div class="symbol white-pawn" ng-show="piece.white">♟</div>
+      <div class="symbol black-pawn" ng-show="piece.black">♟</div>
+      <div class="symbol white-king" ng-show="piece.whiteKing">♚</div>
     </div>
+  </div>
+  <div class="error {{(ai.serverError) ? 'visible' : ''}}">
+    <span ng-show="ai.serverError.down">AI Server appears to be down.</span>
+    <span ng-show="ai.serverError.busy">AI Server is overloaded.</span>
   </div>
 </div>
