@@ -1,6 +1,7 @@
 <div ng-controller="BoardCtrl">
     <ul>
-        <li><label>Game ID: <input value="{{gameId}}"></label></li>
+        <li><label>Game ID: <input ng-model="gameId" ng-change="startGame()"></label></li>
+        <li><button ng-click="resetBoard()">Reset Board</button></li>
         <li><label>Black AI:
             <pretty-checkbox ng-model="ai.black" ng-change="aiValueChanged"/>
         </label></li>

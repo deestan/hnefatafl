@@ -16,11 +16,17 @@ app.use("/api", apiProxy);
 app.use('/', express.static(__dirname + '/app'));
 
 io.on('connection', function(socket) {
-  socket.on('board', function(board) {
-    io.emit('board', board);
+  socket.on('join', function(gameId) {
+    socket.rooms.forEach(function (roomId) {
+      socket.leave(roomId);
+    });
+    io.to(gameId).emit('request board');
+    socket.join(gameId);
   });
-  socket.on('request-board', function(board) {
-    io.emit('request-board', board);
+  socket.on('board', function(board) {
+    socket.rooms.forEach(function (roomId) {
+      io.to(roomId).emit('board', board);
+    });
   });
 });
 

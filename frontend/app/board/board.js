@@ -13,7 +13,6 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   var socket = io("http://localhost:8001/");
 
   socket.on('board', function(board) {
-    askingForBoard = false;
     $scope.pieces = board.pieces;
     $scope.turn = board.turn;
     $scope.ended = board.ended;
@@ -21,16 +20,19 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     makeAiMove();
   });
 
-  var askingForBoard = false;
-  function requestBoard() {
-    askingForBoard = true;
-    socket.emit('request-board', '');
-  }
-
-  socket.on('request-board', function() {
-    if (askingForBoard) return;
+  socket.on('request board', function() {
     emitBoard();
   });
+
+  $scope.startGame = function startGame() {
+    socket.emit("join", $scope.gameId);
+  };
+
+  $scope.resetBoard = function resetBoard() {
+    setBoard();
+    emitBoard();
+    makeAiMove();
+  };
 
   function emitBoard() {
     socket.emit('board', { pieces: $scope.pieces, turn: $scope.turn, ended: $scope.ended });
@@ -121,60 +123,64 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     return true;
   }
 
-  $scope.turn = 0;
   $scope.ai = {
     black: false,
     white: false
   };
-  $scope.pieces = [
-    // top arrow
-    { row: 0, col: 3, black: true },
-    { row: 0, col: 4, black: true },
-    { row: 0, col: 5, black: true },
-    { row: 0, col: 6, black: true },
-    { row: 0, col: 7, black: true },
-    { row: 1, col: 5, black: true },
-    // bottom arrow
-    { row: 10, col: 3, black: true },
-    { row: 10, col: 4, black: true },
-    { row: 10, col: 5, black: true },
-    { row: 10, col: 6, black: true },
-    { row: 10, col: 7, black: true },
-    { row: 9, col: 5, black: true },
-    // left arrow
-    { row: 3, col: 0, black: true },
-    { row: 4, col: 0, black: true },
-    { row: 5, col: 0, black: true },
-    { row: 6, col: 0, black: true },
-    { row: 7, col: 0, black: true },
-    { row: 5, col: 1, black: true },
-    // right arrow
-    { row: 3, col: 10, black: true },
-    { row: 4, col: 10, black: true },
-    { row: 5, col: 10, black: true },
-    { row: 6, col: 10, black: true },
-    { row: 7, col: 10, black: true },
-    { row: 5, col: 9, black: true },
+  function setBoard() {
+    $scope.ended = undefined;
+    $scope.turn = 0;
+    $scope.pieces = [
+      // top arrow
+      { row: 0, col: 3, black: true },
+      { row: 0, col: 4, black: true },
+      { row: 0, col: 5, black: true },
+      { row: 0, col: 6, black: true },
+      { row: 0, col: 7, black: true },
+      { row: 1, col: 5, black: true },
+      // bottom arrow
+      { row: 10, col: 3, black: true },
+      { row: 10, col: 4, black: true },
+      { row: 10, col: 5, black: true },
+      { row: 10, col: 6, black: true },
+      { row: 10, col: 7, black: true },
+      { row: 9, col: 5, black: true },
+      // left arrow
+      { row: 3, col: 0, black: true },
+      { row: 4, col: 0, black: true },
+      { row: 5, col: 0, black: true },
+      { row: 6, col: 0, black: true },
+      { row: 7, col: 0, black: true },
+      { row: 5, col: 1, black: true },
+      // right arrow
+      { row: 3, col: 10, black: true },
+      { row: 4, col: 10, black: true },
+      { row: 5, col: 10, black: true },
+      { row: 6, col: 10, black: true },
+      { row: 7, col: 10, black: true },
+      { row: 5, col: 9, black: true },
 
-    // king's inner guard ring
-    { row: 4, col: 4, white: true },
-    { row: 4, col: 5, white: true },
-    { row: 4, col: 6, white: true },
-    { row: 5, col: 6, white: true },
-    { row: 6, col: 6, white: true },
-    { row: 6, col: 5, white: true },
-    { row: 6, col: 4, white: true },
-    { row: 5, col: 4, white: true },
-    // king's outer guards
-    { row: 3, col: 5, white: true },
-    { row: 7, col: 5, white: true },
-    { row: 5, col: 3, white: true },
-    { row: 5, col: 7, white: true },
+      // king's inner guard ring
+      { row: 4, col: 4, white: true },
+      { row: 4, col: 5, white: true },
+      { row: 4, col: 6, white: true },
+      { row: 5, col: 6, white: true },
+      { row: 6, col: 6, white: true },
+      { row: 6, col: 5, white: true },
+      { row: 6, col: 4, white: true },
+      { row: 5, col: 4, white: true },
+      // king's outer guards
+      { row: 3, col: 5, white: true },
+      { row: 7, col: 5, white: true },
+      { row: 5, col: 3, white: true },
+      { row: 5, col: 7, white: true },
 
-    // king
-    { row: 5, col: 5, whiteKing: true }
-  ];
+      // king
+      { row: 5, col: 5, whiteKing: true }
+    ];
+  }
 
+  setBoard();
   $scope.gameId = 'farts';
 
   function aiToggled() {
@@ -182,7 +188,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     makeAiMove();
   }
 
-  requestBoard();
+  $scope.startGame();
 
   $scope.$watch("ai.black", aiToggled);
   $scope.$watch("ai.white", aiToggled);
