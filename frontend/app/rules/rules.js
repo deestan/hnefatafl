@@ -20,7 +20,7 @@ angular.module('myApp.rules', [])
     var piece = pieces[pieceIndex];
 
     function checkOwnPiece() {
-      return blackTurn(board) == piece.black;
+      return !blackTurn(board) == !piece.black;
     }
     if (!checkOwnPiece()) return;
 
