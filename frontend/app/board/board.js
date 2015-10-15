@@ -11,6 +11,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 
 .controller('BoardCtrl', ['$scope', 'ai', 'rules', 'nameGenerator', function($scope, ai, rules, nameGenerator) {
   var socket = io("http://localhost:8001/");
+  socket.io.reconnection(true).reconnectionAttempts(10000).reconnectionDelay(10000);
 
   socket.on('board', function(board) {
     $scope.pieces = board.pieces;
@@ -20,14 +21,16 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     makeAiMove();
   });
 
-  socket.on('request board', function() {
-    emitBoard();
-  });
-
-  $scope.startGame = function startGame() {
+  $scope.connectGame = function connectGame() {
     socket.emit("join", $scope.gameId);
     localStorage["gameId"] = $scope.gameId;
   };
+
+  socket.io.on('reconnect', $scope.connectGame);
+
+  socket.on('request board', function() {
+    emitBoard();
+  });
 
   $scope.resetBoard = function resetBoard() {
     setBoard();
@@ -190,7 +193,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     makeAiMove();
   }
 
-  $scope.startGame();
+  $scope.connectGame();
 
   $scope.$watch("ai.black", aiToggled);
   $scope.$watch("ai.white", aiToggled);
