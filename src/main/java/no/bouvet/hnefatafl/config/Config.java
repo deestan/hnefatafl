@@ -10,6 +10,19 @@ public class Config extends Configuration {
     @NotNull
     private Integer searchDepth = 2;
 
+    @NotNull
+    private Integer maxBrainThreads = 2;
+
+    @JsonProperty
+    public Integer getMaxBrainThreads() {
+        return maxBrainThreads;
+    }
+
+    @JsonProperty
+    public void setMaxBrainThreads(Integer maxBrainThreads) {
+        this.maxBrainThreads = maxBrainThreads;
+    }
+
     @JsonProperty
     public Integer getSearchDepth() {
         return searchDepth;

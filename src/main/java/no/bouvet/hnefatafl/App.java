@@ -24,7 +24,7 @@ public class App extends Application<Config> {
 
     @Override
     public void run(Config config, Environment environment) {
-        Brain brain = new Brain(config.getSearchDepth());
+        Brain brain = new Brain(config.getSearchDepth(), config.getMaxBrainThreads());
         environment.jersey().register(brain);
 
         final BrainHealthCheck healthCheck = new BrainHealthCheck(brain);

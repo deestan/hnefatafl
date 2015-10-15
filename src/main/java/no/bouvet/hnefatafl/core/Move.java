@@ -10,4 +10,11 @@ public class Move {
         this.toRow = toRow;
         this.toCol = toCol;
     }
+
+    @Override
+    public String toString() {
+        return "{\"pieceIndex\": " + pieceIndex + ", " +
+                "\"row\": " + toRow + ", " +
+                "\"col\": " + toCol + "}";
+    }
 }
