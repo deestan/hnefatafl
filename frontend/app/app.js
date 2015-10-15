@@ -7,6 +7,7 @@ angular.module('myApp', [
   'myApp.viewRules',
   'myApp.ai',
   'myApp.rules',
+  'myApp.nameGenerator',
   'myApp.version',
   'myApp.prettyCheckbox'
 ]).

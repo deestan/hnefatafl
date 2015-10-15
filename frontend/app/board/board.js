@@ -9,7 +9,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   });
 }])
 
-.controller('BoardCtrl', ['$scope', 'ai', 'rules', function($scope, ai, rules) {
+.controller('BoardCtrl', ['$scope', 'ai', 'rules', 'nameGenerator', function($scope, ai, rules, nameGenerator) {
   var socket = io("http://localhost:8001/");
 
   socket.on('board', function(board) {
@@ -181,7 +181,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   }
 
   setBoard();
-  $scope.gameId = 'farts';
+  $scope.gameId = nameGenerator();
 
   function aiToggled() {
     $scope.ai.serverError = null;
