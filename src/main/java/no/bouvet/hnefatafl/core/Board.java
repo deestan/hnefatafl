@@ -23,10 +23,10 @@ public class Board {
     }
 
     public boolean blackTurn() {
-        return this.turn % 2 == 1;
+        return this.turn % 2 == 0;
     }
 
     public boolean whiteTurn() {
-        return this.turn % 2 == 0;
+        return this.turn % 2 == 1;
     }
 }
