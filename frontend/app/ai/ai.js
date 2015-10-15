@@ -2,17 +2,13 @@
 
 angular.module('myApp.ai', [])
 .factory('ai', ['$http', function($http) {
-  function findBestMoveOffloaded(board, callback) {
-    $http({
+  function findBestMoveOffloaded(board) {
+    return $http({
       method: 'POST',
       url: '/api/ponder',
       data: { pieces: board.pieces,
               turn: board.turn
             }
-    }).then(function good(response) {
-      callback(response.data);
-    }, function bad(response) {
-      callback(new Error(response));
     });
   }
 

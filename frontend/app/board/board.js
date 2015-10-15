@@ -10,10 +10,6 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 }])
 
 .controller('BoardCtrl', ['$scope', 'ai', 'rules', function($scope, ai, rules) {
-  $scope.aiValueChanged = function() {
-    setTimeout($scope.makeAiMove, 500);
-  }
-
   $scope.selectPiece = function(index, event) {
     $scope.selectedIndex = index;
     jQuery('.piece').removeClass('selected');
@@ -21,16 +17,16 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 
       // Is it the correct player's turn, and is it human controlled?
       if ($scope.pieces[index].black) {
-        if (!($scope.turn % 2) || $scope.blackAi)
+        if (!($scope.turn % 2) || $scope.ai.black)
           return $scope.selectedIndex = undefined;
       } else {
-        if (($scope.turn % 2) || $scope.whiteAi)
+        if (($scope.turn % 2) || $scope.ai.white)
           return $scope.selectedIndex = undefined;
       }
 
       jQuery(event.target).closest('.piece').addClass('selected');
     }
-  }
+  };
 
   $scope.selectSquare = function(event) {
     var el = jQuery(event.target);
@@ -38,27 +34,36 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     var row = el.closest('tr').index();
     if ($scope.selectedIndex != undefined) {
       if ($scope.movePiece($scope.selectedIndex, row, col))
-        if (!$scope.ended)
-          setTimeout($scope.makeAiMove, 200);
+        $scope.makeAiMove();
       $scope.selectPiece(undefined);
     }
   }
 
   var aiMoveWait;
-  $scope.makeAiMove = function() {
+  var makeAiMove = function makeAiMove() {
     if (aiMoveWait) return;
     if ($scope.ended) return;
     if ($scope.turn % 2) {
-      if (!$scope.blackAi) return;
+      if (!$scope.ai.black) return;
     } else {
-      if (!$scope.whiteAi) return;
+      if (!$scope.ai.white) return;
     }
-    ai.bestMove($scope, function(move) {
-      setTimeout(function() {
-        aiMoveWait = null;
-        $scope.movePiece(move.pieceIndex, move.row, move.col);
-        $scope.$apply();
-      }, 500);
+    ai.bestMove($scope).then(
+        function success(result) {
+          $scope.brainIsBusy = false;
+          var move = result.data;
+          $scope.movePiece(move.pieceIndex, move.row, move.col);
+          setTimeout(makeAiMove, 0);
+        },
+        function failure(error) {
+          $scope.brainIsBusy = false;
+          if (error.status == 503)
+            console.log("Busy busy...");
+          setTimeout(makeAiMove, 1000);
+          console.log("BADNESS!!");
+        }
+    ).finally(function anyways() {
+        aiMoveWait = false;
     });
     aiMoveWait = true;
   }
@@ -75,14 +80,15 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     }
     
     rules.applyMove($scope, pieceIndex, row, col);
-    setTimeout($scope.makeAiMove, 500);
 
     return true;
   }
 
   $scope.turn = 0;
-  $scope.blackAi = true;
-  $scope.whiteAi = false;
+  $scope.ai = {
+    black: true,
+    white: false
+  };
   $scope.pieces = [
     // top arrow
     { row: 0, col: 3, black: true },
@@ -131,4 +137,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     // king
     { row: 5, col: 5, whiteKing: true }
   ];
+
+  $scope.$watch("ai.black", makeAiMove);
+  $scope.$watch("ai.white", makeAiMove);
 }]);
