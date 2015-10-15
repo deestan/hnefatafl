@@ -26,6 +26,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 
   $scope.startGame = function startGame() {
     socket.emit("join", $scope.gameId);
+    localStorage["gameId"] = $scope.gameId;
   };
 
   $scope.resetBoard = function resetBoard() {
@@ -181,7 +182,8 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   }
 
   setBoard();
-  $scope.gameId = nameGenerator();
+
+  $scope.gameId = localStorage["gameId"] || nameGenerator();
 
   function aiToggled() {
     $scope.ai.serverError = null;
