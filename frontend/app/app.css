@@ -113,6 +113,30 @@
     color: white;
 }
 
+.ai-thinking {
+    -webkit-animation: pulse 1s ease-out infinite alternate;
+    -o-animation: pulse 1s ease-out infinite alternate;
+    animation: pulse 1s ease-out infinite alternate;
+}
+
+@-webkit-keyframes pulse {
+    0% { color: #888 }
+    95% { color: #010a05 }
+    100% { color: #0000d0 }
+}
+
+@-o-keyframes pulse {
+    0% { color: #888 }
+    95% { color: #010a05 }
+    100% { color: #0000d0 }
+}
+
+@keyframes pulse {
+    0% { color: #888 }
+    95% { color: #010a05 }
+    100% { color: #0000d0 }
+}
+
 /* pretty-checkbox style stuff */
 pretty-checkbox {
     vertical-align: bottom;
