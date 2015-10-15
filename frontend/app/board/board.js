@@ -169,6 +169,8 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
     { row: 5, col: 5, whiteKing: true }
   ];
 
+  $scope.gameId = 'farts';
+
   function aiToggled() {
     $scope.ai.serverError = null;
     makeAiMove();
