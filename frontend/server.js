@@ -1,11 +1,10 @@
 var PORT = 8000;
-var WEBSOCKET_PORT = 8001;
 
 var express = require('express');
-var proxy = require('express-http-proxy');
-var io = require('socket.io')(WEBSOCKET_PORT);
-
 var app = express();
+var proxy = require('express-http-proxy');
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 var apiProxy = proxy('localhost:8080/', {
     forwardPath: function (req, res) {
@@ -35,6 +34,5 @@ io.on('connection', function(socket) {
   });
 });
 
-app.listen(PORT);
+server.listen(PORT);
 console.log("Webserver listening on port " + PORT);
-console.log("Websockets listening on port " + WEBSOCKET_PORT);

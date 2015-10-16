@@ -10,7 +10,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
 }])
 
 .controller('BoardCtrl', ['$window', '$scope', 'ai', 'rules', 'nameGenerator', function($window, $scope, ai, rules, nameGenerator) {
-  var socket = io($window.location.protocol + "//" + $window.location.hostname + ":8001/");
+  var socket = io($window.location.protocol + "//" + $window.location.hostname + ":" + $window.location.port +"/");
   socket.io.reconnection(true).reconnectionAttempts(10000).reconnectionDelay(10000);
 
   socket.on('board', function(board) {
