@@ -9,8 +9,9 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   });
 }])
 
-.controller('BoardCtrl', ['$window', '$scope', 'ai', 'rules', 'nameGenerator', function($scope, ai, rules, nameGenerator) {
-  var socket = io($window.location.protocol + "://" + $window.location.hostname + ":8001/");
+.controller('BoardCtrl', ['$window', '$scope', 'ai', 'rules', 'nameGenerator', function($window, $scope, ai, rules, nameGenerator) {
+  console.log("socket",$window.location.protocol + "//" + $window.location.hostname + ":8001/");
+  var socket = io($window.location.protocol + "//" + $window.location.hostname + ":8001/");
   socket.io.reconnection(true).reconnectionAttempts(10000).reconnectionDelay(10000);
 
   socket.on('board', function(board) {
@@ -41,6 +42,18 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   function emitBoard() {
     socket.emit('board', { pieces: $scope.pieces, turn: $scope.turn, ended: $scope.ended });
   }
+
+  socket.on('chat', function(message) {
+    $scope.chatMessages.push({ts: Date.now(), text: message});
+    if ($scope.chatMessages.length > 10)
+      $scope.chatMessages.shift();
+    $scope.$apply();
+  });
+
+  $scope.chat = function() {
+    socket.emit('chat', $scope.chatMessage);
+    $scope.chatMessage = "";
+  };
 
   $scope.selectPiece = function(index, event) {
     $scope.selectedIndex = index;
@@ -183,6 +196,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
       { row: 5, col: 5, whiteKing: true }
     ];
   }
+  $scope.chatMessages = [];
 
   setBoard();
 

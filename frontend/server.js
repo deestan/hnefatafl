@@ -28,6 +28,11 @@ io.on('connection', function(socket) {
       io.to(roomId).emit('board', board);
     });
   });
+  socket.on('chat', function(message) {
+    socket.rooms.forEach(function (roomId) {
+      io.to(roomId).emit('chat', message);
+    });
+  });
 });
 
 app.listen(PORT);

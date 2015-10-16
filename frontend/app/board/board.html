@@ -44,4 +44,12 @@
         <span ng-show="ai.serverError.down">AI Server appears to be down.</span>
         <span ng-show="ai.serverError.busy">AI Server is overloaded.</span>
     </div>
+    <div class="chat">
+        <form ng-submit="chat()">
+            <Label>Chat: <input ng-model="chatMessage" placeholder="chat message"></label>
+        </form>
+        <ul class="chat-history">
+            <li ng-repeat="message in chatMessages | orderBy:'ts':'reverse'">{{message.text}}</li>
+        </ul>
+    </div>
 </div>
