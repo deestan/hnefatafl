@@ -51,6 +51,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   });
 
   $scope.chat = function() {
+    if (!$scope.chatMessage || $scope.chatMessage == '') return;
     socket.emit('chat', $scope.chatMessage);
     $scope.chatMessage = "";
   };
