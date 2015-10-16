@@ -231,9 +231,12 @@ pretty-checkbox input {
     border: none;
 }
 
-.chat li {
+.chat ul {
     border: 1px solid grey;
-    border-bottom: none;
+}
+
+.chat li {
+    border-bottom: 1px solid #eee;
     padding: 2px;
     margin: 0;
     -ms-word-wrap: break-word;
@@ -241,5 +244,5 @@ pretty-checkbox input {
 }
 
 .chat li:last-child {
-    border-bottom: 1px solid grey;
+    border-bottom: none;
 }
