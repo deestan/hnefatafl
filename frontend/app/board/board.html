@@ -46,7 +46,7 @@
     </div>
     <div class="chat">
         <form ng-submit="chat()">
-            <Label>Chat: <input ng-model="chatMessage" placeholder="chat message"></label>
+            <Label>><input ng-model="chatMessage" placeholder="chat message"></label>
         </form>
         <ul class="chat-history">
             <li ng-repeat="message in chatMessages | orderBy:'ts':'reverse'">{{message.text}}</li>
