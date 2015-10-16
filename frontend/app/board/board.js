@@ -9,8 +9,8 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   });
 }])
 
-.controller('BoardCtrl', ['$scope', 'ai', 'rules', 'nameGenerator', function($scope, ai, rules, nameGenerator) {
-  var socket = io("http://localhost:8001/");
+.controller('BoardCtrl', ['$window', '$scope', 'ai', 'rules', 'nameGenerator', function($scope, ai, rules, nameGenerator) {
+  var socket = io($window.location.protocol + "://" + $window.location.hostname + ":8001/");
   socket.io.reconnection(true).reconnectionAttempts(10000).reconnectionDelay(10000);
 
   socket.on('board', function(board) {
