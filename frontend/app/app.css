@@ -1,5 +1,16 @@
 /* app css stylesheet */
 
+html {
+    background: antiquewhite;
+}
+
+body {
+    background: white;
+    width: 600px;
+    margin: 10px auto 10px auto;
+    padding: 10px;
+}
+
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -201,29 +212,28 @@ pretty-checkbox input {
 }
 
 .chat {
-    width: 400px;
     font-family: monospace;
-    border: 1px solid grey;
     padding: 0;
+    overflow: hidden;
 }
 
 .chat form {
     background: #ffffd0;
-    position: relative;
-    border-bottom: 1px solid grey;
+    border: 1px solid grey;
     overflow: hidden;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
 }
 
 .chat input {
     font-size: 16px;
     background: #ffffd0;
-    width: 392px;
+    width: 100%;
     border: none;
 }
 
 .chat li {
-    border-bottom: 1px solid #efefef;
+    border: 1px solid grey;
+    border-bottom: none;
     padding: 2px;
     margin: 0;
     -ms-word-wrap: break-word;
@@ -231,5 +241,5 @@ pretty-checkbox input {
 }
 
 .chat li:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid grey;
 }
