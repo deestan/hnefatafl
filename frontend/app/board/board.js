@@ -22,8 +22,10 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   });
 
   $scope.connectGame = function connectGame() {
+    setBoard();
     socket.emit("join", $scope.gameId);
     localStorage["gameId"] = $scope.gameId;
+    $scope.chatMessages = [];
   };
 
   socket.io.on('reconnect', $scope.connectGame);
@@ -33,9 +35,8 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
   });
 
   $scope.resetBoard = function resetBoard() {
-    setBoard();
-    emitBoard();
-    makeAiMove();
+    $scope.gameId = nameGenerator();
+    $scope.connectGame();
   };
 
   function emitBoard() {
