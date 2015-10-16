@@ -83,7 +83,7 @@ angular.module('myApp.board', ['ngRoute', 'myApp.ai', 'myApp.rules'])
         makeAiMove();
       $scope.selectPiece(undefined);
     }
-  }
+  };
 
   function isAiMove() {
     if ($scope.turn % 2) {
